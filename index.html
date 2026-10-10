@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Customer Segmentation</h1>
+            <p>Machine Learning using K-Means Clustering</p>
+        </header>
+
+        <section class="card">
+            <h2>Enter Customer Details</h2>
+
+            <form method="POST" action="/">
+                <label for="income">Annual Income (in thousands)</label>
+                <input
+                    type="number"
+                    id="income"
+                    name="income"
+                    min="0.01"
+                    step="any"
+                    placeholder="Enter annual income"
+                    value="{{ income }}"
+                    required
+                >
+
+                <label for="spending">Spending Score (1–100)</label>
+                <input
+                    type="number"
+                    id="spending"
+                    name="spending"
+                    min="1"
+                    max="100"
+                    step="any"
+                    placeholder="Enter spending score"
+                    value="{{ spending }}"
+                    required
+                >
+
+                <button type="submit">Find Customer Group</button>
+            </form>
+
+            {% if error %}
+                <div class="error">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            {% if result is not none %}
+                <div class="result">
+                    <h3>Segmentation Result</h3>
+                    <p>
+                        This customer belongs to
+                        <strong>Cluster {{ result }}</strong>.
+                    </p>
+                    <p>
+                        This group is determined by similarities
+                        in annual income and spending score.
+                    </p>
+                </div>
+            {% endif %}
+        </section>
+
+                
+        <section class="card">
+            <h2>Customer Clustering Visualization</h2>
+
+            <p>
+                Each colored dot represents a customer.
+                Different colors indicate different clusters.
+                The black X marks represent cluster centers.
+            </p>
+
+            <div class="chart-container">
+                <img
+                    src="{{ url_for('static', filename='cluster_plot.png') }}"
+                    alt="K-Means customer clustering scatter plot"
+                >
+            </div>
+        </section>
+
+
+        <section class="card">
+            <h2>Customer Dataset</h2>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>Annual Income</th>
+                            <th>Spending Score</th>
+                            <th>Cluster</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for customer in customers %}
+                        <tr>
+                            <td>{{ customer.CustomerID }}</td>
+                            <td>{{ customer.Annual_Income }}</td>
+                            <td>{{ customer.Spending_Score }}</td>
+                            <td>Cluster {{ customer.Cluster }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>
+            <p>Customer Segmentation Project | Flask + K-Means</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
